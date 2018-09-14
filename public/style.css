@@ -1,0 +1,80 @@
+h1{
+    color: red;
+    font-family:verdana;
+    font-size: 20px; 
+    text-align: center
+};
+
+.bgimg {
+    background-image: url('https://bulma.io/images/placeholders/96x96.png');
+}
+
+.imageContainer {
+margin-left: 50px; 
+margin-top: 50px;
+}
+
+
+.container {
+    text-align: center;
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  
+table {
+   border-collapse: collapse;
+   width: 100%;
+}
+
+th, td {
+   text-align: left;
+   padding: 8px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+
+  .cardContainer {
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+.card-heading {
+    padding: 16px;
+}
+
+.field-line, .button-line {
+    padding: 16px;
+  }
+
+.top-bar {
+    padding: 10px 15px;
+    margin-bottom: 50px;
+}
+
+.top-bar-left {
+    float: left;
+    font-size: 1.5em;
+  }
+  
+.cardWidth {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+.textStyle{
+    color: #323765
+}
+
+.top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 50px;
+  }
+
+  .pointer { 
+      cursor: pointer; 
+    }
