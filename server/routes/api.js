@@ -35,5 +35,14 @@ router.get('/fetchEvents',async(req,res) => {
 
 })
 
+router.put('/deleteEvent',async(req,res) => {
+    const event =  await Events.remove({_id:req.body.eventId});
+    const availableEvents = await Events.find({user:req.user._id});
+    return res.status(200).json({
+      success:true,
+      data:availableEvents
+    });
+})
+
 
 module.exports = router;

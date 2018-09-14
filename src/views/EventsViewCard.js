@@ -14,13 +14,17 @@ import {
   grey300,
   grey400,
   grey500,
+  red500,
   white,
   darkBlack,
-  fullBlack
+  fullBlack,
+  red900
 } from 'material-ui/styles/colors'
 import styled from 'styled-components'
 import RaisedButton from 'material-ui/RaisedButton'
 import { theme } from '../utils/theme';
+import FlatButton from 'material-ui/FlatButton'
+
 
 
 const ButtonContainer = styled.div`
@@ -35,6 +39,7 @@ const EventsViewCard = ({
   fees,
   location,
   tags,
+  deleteEvent ,
   user,
   _id
 }) => (
@@ -49,6 +54,7 @@ const EventsViewCard = ({
       }}
       titleStyle={{fontSize: 20}}
     />
+
     <Card
       zDepth={1}
       style={{
@@ -94,6 +100,22 @@ const EventsViewCard = ({
     </CardText>
     <ButtonContainer>
       <CardActions>
+
+      <RaisedButton
+          label='Edit Event'
+          backgroundColor={theme.primary2Color}
+          labelColor={theme.backgroundColor}
+      />
+
+      <RaisedButton
+          label='Delete Event'
+          backgroundColor={red500}
+          labelColor={theme.backgroundColor}
+          onClick = {() => {
+             deleteEvent(_id);
+          }}
+        />
+
         <RaisedButton
           label='Send Invitations'
           backgroundColor={theme.primary2Color}

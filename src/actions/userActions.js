@@ -2,7 +2,7 @@
 import axios from 'axios';
 import validator from 'validator';
 import Auth from '../modules/Auth';
-import { post , get } from '../utils/requests';
+import { post , get, put } from '../utils/requests';
 import { apiEndPoint, apiURL } from '../utils/config';
 // import { get } from 'http';
 // import validator from "validator";
@@ -268,4 +268,20 @@ export const closeSignupModule = () => (dispatch,getState) => {
   dispatch({
     type:'CLOSE_SIGNUP_MODULE'
   })
+}
+
+export const deleteEvent = (eventId) => (dispatch,getState) => {
+  console.log('eventID =          ==>',eventId);
+  const token = Auth.getToken();
+  dispatch({
+    type:'DELETE_EVENT',
+    payload:put(`${apiEndPoint}/api/deleteEvent/`, {eventId},{
+      Authorization: `bearer ${token}`
+    }).then((res) => {
+        dispatch({
+          type: 'DELETE_EVENT_SUCCESSFULL',
+          data:res.data
+        })
+     })
+  }) 
 }

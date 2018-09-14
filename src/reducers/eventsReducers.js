@@ -234,6 +234,14 @@ export function eventsReducers (state = {events: []}, action) {
       }
     }
 
+    case 'DELETE_EVENT_SUCCESSFULL':{
+      return{
+        ...state,
+        availableEvents:action.data,
+        openSuccessModal:true
+      }
+    }
+
     default:
       let { eventName , eventDescription , duration , location , participantNo , tags , fees , name , email , password } = state;
       return {
