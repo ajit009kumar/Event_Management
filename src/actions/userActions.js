@@ -40,25 +40,55 @@ export const loginUser = (email,password) => (dispatch, getState)  => {
 }
 
 export const signUp = (name,email,password) => (dispatch,getState)  => {
-  dispatch({
-    type:'SIGNUP',
-    payload:post(`${apiEndPoint}/auth/signup`,{name,email,password}).then((res) => {
-      dispatch({
-        type:'SIGNUP_FULFILLED',
-        data:res
-      })
-    }).catch((err) => {
-      dispatch({
-        type:'SIGNUP_REJECTED',
-        err
+
+  const { email , name , password } = getState().events;
+
+  let flag = 0;
+
+  if(validator.isEmpty(name)){
+    flag = 1;
+    dispatch({
+      type:'SIGNUP_NAME_FIELD_ERROR',
+      error:'Name is Required'
+    })
+  }
+
+  if(validator.isEmpty(email)){
+    flag = 1;
+    dispatch({
+      type:'SIGNUP_EMAIL_FIELD_ERROR',
+      error:'Email is Required'
+    })
+  }
+
+  if(validator.isEmpty(password)){
+    flag = 1;
+    dispatch({
+      type:'SIGNUP_PASSWORD_ERROR',
+      error:'Password is Required'
+    })
+  }
+
+  if(!flag){
+    dispatch({
+      type:'SIGNUP',
+      payload:post(`${apiEndPoint}/auth/signup`,{name,email,password}).then((res) => {
+        dispatch({
+          type:'SIGNUP_FULFILLED',
+          data:res
+        })
+      }).catch((err) => {
+        dispatch({
+          type:'SIGNUP_REJECTED',
+          error:err.errors
+        })
       })
     })
-  })
+  }
 }
 
 export const checkValidation = () => (dispatch,getState) => {
    const { eventName , eventDescription , duration , location , fees , tags ,  participantNo} = getState().events;
-  //  console.log('token==================================>',token);
 
   let events = {
     eventName: eventName,
@@ -231,5 +261,11 @@ export const getEvents = () => (dispatch,getState) => {
           data:res.data
         })
     })
+  })
+}
+
+export const closeSignupModule = () => (dispatch,getState) => {
+  dispatch({
+    type:'CLOSE_SIGNUP_MODULE'
   })
 }

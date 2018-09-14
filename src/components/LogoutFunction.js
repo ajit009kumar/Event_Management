@@ -7,6 +7,8 @@ class LogoutFunction extends React.Component {
 
   componentDidMount() {
     Auth.deauthenticateUser();
+    Auth.removeUSerName();
+    window.location.reload();
     this.props.history.push('/');
   }
 

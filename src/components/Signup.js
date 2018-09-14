@@ -10,9 +10,12 @@ import {Link} from 'react-router-dom'
 import {Card, CardText} from 'material-ui/Card'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
-import {grey100} from 'material-ui/styles/colors'
-import {updateField, signUp} from '../actions/userActions'
-import Auth from '../modules/Auth'
+import {grey100, red900} from 'material-ui/styles/colors'
+import {updateField, signUp,closeSignupModule} from '../actions/userActions'
+import Auth from '../modules/Auth';
+import { theme } from '../utils/theme';
+import Dialog from 'material-ui/Dialog';
+
 
 // import './../app.css';
 
@@ -29,16 +32,32 @@ class Signup extends React.Component {
 
 
   componentWillReceiveProps(previousprops) {
-    const { signupSuccessfull } = previousprops;
+    // const { signupSuccessfull } = previousprops;
+    // const { history } = this.props;
+    // if(signupSuccessfull){
+    //   history.push('/');
+    // }
+  }
+
+  redirect() {
     const { history } = this.props;
-    if(signupSuccessfull){
-      history.push('/');
-    }
+    history.push('/');
   }
 
 
   render () {
-    const { name,email,password,signUp,update,signupSuccessfull }= this.props;
+    const { name,
+            email,
+            password,
+            signUp,
+            update,
+            signupSuccessfull , nameErrorMessage , emailErrorMessage , 
+            passwordErrorMessage , openSuccessSignup,closeSignupModule,
+            signupRejectedErrorMessage }= this.props;
+
+            console.log('openSuccessSignup=====================>',openSuccessSignup);
+
+
     return (
       <div>
         <div className='top-bar'>
@@ -53,19 +72,17 @@ class Signup extends React.Component {
                   }}
             >
               <h2 className='card-heading'>Sign Up</h2>
-        
               {signupSuccessfull &&
                 <p className='success-message'>{signupSuccessfull}</p>}
-            {/* {errors.summary &&
-                <p className='error-message'>{errors.summary}</p>} * */}
+            {signupRejectedErrorMessage &&
+                <p className='error-message' style = {{color:red900}} >{signupRejectedErrorMessage}</p>} 
 
               <div className='field-line'>
                 <TextField
                   floatingLabelText='Name'
                   name='name'
-                //   errorText={userInfo ? userInfo.message : null}
-                  // onChange={onChange}
-                  // value={user.email}
+                  // value = {name}
+                  errorText={nameErrorMessage}
                   onChange={(_, value) => {
                     update('name', value)
                   }}
@@ -76,12 +93,12 @@ class Signup extends React.Component {
                 <TextField
                   floatingLabelText='Email'
                   name='email'
+                  // value={email}
                   onChange={(_, value) => {
                     update('email', value)
                   }}
-                  //   errorText={errors.email}
-                  //   onChange={onChange}
-                  //   value={user.email}
+                    errorText={emailErrorMessage}
+                 
                 />
               </div>
 
@@ -90,12 +107,12 @@ class Signup extends React.Component {
                   floatingLabelText='Password'
                   type='password'
                   name='password'
+                  // value={password}
                   onChange={(_, value) => {
                     update('password', value)
                   }}
                   // onChange={onChange}
-                  // errorText={errors.password}
-                  // value={user.password}
+                  errorText={passwordErrorMessage}
                 />
               </div>
 
@@ -114,6 +131,33 @@ class Signup extends React.Component {
             </form>
           </Card>
 
+          <Dialog
+            title="Success"
+            titleStyle={{
+              backgroundColor: theme.primary2Color,
+              color: theme.alternateTextColor,
+            }}
+            labe
+            modal={false}
+            actions={
+              <RaisedButton
+                label="OK"
+                backgroundColor={theme.buttonColor}
+                style={{ marginRight: 5 }}
+                labelColor={theme.primary1Color}
+                onClick={() => {
+                  closeSignupModule();
+                  this.redirect();
+                  }
+                }
+              />
+            }
+            open={openSuccessSignup}
+          >
+            <CardText style={{ fontSize: 20 }}>
+            You have successfully Sign Up.
+            </CardText>
+          </Dialog>
         </div>
       </div>
     )
@@ -128,6 +172,9 @@ const mapDispatchToProps = dispatch => ({
     },
     signUp:(name,email,password) => {
       dispatch(signUp(name,email,password))
+    },
+    closeSignupModule:() => {
+      dispatch(closeSignupModule());
     }
 })
 

@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux'
 import styled from 'styled-components'
 import {Card, CardText, CardTitle} from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
-import {red100} from 'material-ui/styles/colors'
+import {red100,grey100} from 'material-ui/styles/colors'
 import Auth from '../modules/Auth';
 import {
     Link,
@@ -13,20 +13,9 @@ import {
 import RaisedButton from "material-ui/RaisedButton";
 import Dialog from 'material-ui/Dialog';
 import EventsView from './EventsView';
-import {
-    indigo500, // indigo400,
-    redA200,
-    grey100, grey200, grey300, grey400, grey500,
-    white, darkBlack, fullBlack,
-  } from 'material-ui/styles/colors';
-  import Subheader from 'material-ui/Subheader'
-  import { fade } from 'material-ui/utils/colorManipulator';
-  import { checkValidation , closeDialog , createEvent , closeSuccessModal } from '../actions/userActions';
-  
-  
-
-  
-
+import Subheader from 'material-ui/Subheader'
+import { checkValidation , closeDialog , createEvent , closeSuccessModal } from '../actions/userActions';
+// import { theme } from '../utils/theme';
 
 const ContentWrapper = styled.div`
 width: 90%;
@@ -45,11 +34,10 @@ justify-content: flex-end;
 `;
 
 const theme = {
-    primary1Color: white,
+    primary1Color: 'white',
     buttonColor: '#323770',
     primary2Color: '#323770',
-    alternateTextColor: white,
-    
+    alternateTextColor: 'white',   
 }
 
 class Events extends React.Component {
@@ -103,7 +91,9 @@ class Events extends React.Component {
               <ButtonContainer>
                 <RaisedButton
                   label="Back"
-                  onTouchTap={this.handlePrev}
+                  onClick={() => {
+                    this.handlePrev();
+                    }}
                 //   disabled={stepIndex === 0}
                   backgroundColor={theme.buttonColor}
                   style={{ marginLeft: 12, marginRight: 5 }}
@@ -112,7 +102,9 @@ class Events extends React.Component {
                 <RaisedButton
                   label= 'Create Events' 
                   primary
-                  onTouchTap={checkValidation}
+                  onClick = {() => {
+                    checkValidation();
+                  }}
                 />
               </ButtonContainer>
             </div>
@@ -132,13 +124,17 @@ class Events extends React.Component {
                 // backgroundColor={theme.buttonColor}
                 style={{ marginLeft: 12, marginRight: 5 }}
                 // labelColor={theme.primary1Color}
-                onTouchTap={closeDialog}
+                onClick = {() => {
+                  closeDialog();
+                }}
               />,
               <RaisedButton
                 key="DRIVE_CREATE"
                 label="Create"
                 primary
-                onTouchTap={createEvent}
+                onClick = {() => {
+                  createEvent();
+                }}
               />,
             ]}
             modal={false}
@@ -161,7 +157,7 @@ class Events extends React.Component {
                 backgroundColor={theme.buttonColor}
                 style={{ marginRight: 5 }}
                 labelColor={theme.primary1Color}
-                onTouchTap={() => {
+                onClick={() => {
                   closeSuccessModal();
                   this.redirect();
                   }
@@ -171,7 +167,7 @@ class Events extends React.Component {
             open={openSuccessModal}
           >
             <CardText style={{ fontSize: 20 }}>
-            You have successfully created the drive.
+            You have successfully created the Events.
             </CardText>
           </Dialog>
         </Card>

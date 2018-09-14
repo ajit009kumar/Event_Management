@@ -26,7 +26,9 @@ const defaultState = {
   openDialog:false,
   openSuccessModal:false,
   availableEvents:[],
-
+  nameErrorMessage:undefined,
+  signupRejectedErrorMessage:undefined,
+  openSuccessSignup:false
 }
 
 export function eventsReducers (state = {events: []}, action) {
@@ -59,13 +61,17 @@ export function eventsReducers (state = {events: []}, action) {
     case 'SIGNUP_FULFILLED':{
        return{
          ...state,
-         signupSuccessfull: 'Successfully signup'
+         signupSuccessfull: 'Successfully signup',
+         openSuccessSignup:true
        }
     }
 
     case 'SIGNUP_REJECTED':{
       return {
-        ...state
+        ...state,
+        // signupRejectedErrorMessage:action.error,
+        emailErrorMessage:action.error.email ? action.error.email  : undefined,
+        passwordErrorMessage: action.error.password ? action.error.password : undefined
       }
     }
 
@@ -140,8 +146,6 @@ export function eventsReducers (state = {events: []}, action) {
       }
     }
 
-
-
     case 'OPEN_DIALOG':{
         return {
           ...state,
@@ -195,19 +199,55 @@ export function eventsReducers (state = {events: []}, action) {
       }
     }
 
-    
+    case 'SIGNUP_NAME_FIELD_ERROR':{
+      return{
+        ...state,
+        nameErrorMessage:action.error
+      }
+    }
 
+    case 'SIGNUP_EMAIL_FIELD_ERROR':{
+      return{
+        ...state,
+        emailErrorMessage:action.error
+      }
+    }
 
-    default:
+    case 'VALID_EMAIL_ERROR': {
+      return{
+        ...state,
+        emailErrorMessage:action.error
+      }
+    }
+ 
+    case 'SIGNUP_PASSWORD_ERROR':{
       return {
         ...state,
-        eventName:'',
-        eventDescription:'',
-        duration:'',
-        location:'',
-        participantNo:'',
-        tags:'',
-        fees:''
+        passwordErrorMessage:action.error
+      }
+    }
+
+    case 'CLOSE_SIGNUP_MODULE':{
+      return{
+        ...state,
+        openSuccessSignup:false
+      }
+    }
+
+    default:
+      let { eventName , eventDescription , duration , location , participantNo , tags , fees , name , email , password } = state;
+      return {
+        ...state,
+        eventName: eventName ? eventName : '',
+        eventDescription: eventDescription ? eventDescription : '' ,
+        duration: duration ? duration : '',
+        location: location ? location : '',
+        participantNo: participantNo ? participantNo : '',
+        tags: tags ? tags : '',
+        fees: fees ? fees : '',
+        name: name  ? name : '',
+        email: email ? email : '',
+        password: password ? password : ''
       }
   }
   return state
