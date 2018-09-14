@@ -29,6 +29,7 @@ class Dashboard extends React.Component {
         this.state = {
             secretData: undefined,
             user: undefined,
+            openCard:''
         }
     }
 
@@ -42,8 +43,14 @@ class Dashboard extends React.Component {
         })
     }
 
+    onChangeExpander = (id) => {
+        this.setState(() => ({
+          openCard: id,
+        }));
+      }
+
     render(){
-        const { secretData , userName } = this.state;
+        const { secretData , userName , openCard } = this.state;
         const { availableEvents } = this.props;
         return(
             <div>
@@ -75,6 +82,8 @@ class Dashboard extends React.Component {
           { availableEvents && availableEvents.map(events => (
             <EventsView
             {...events}
+            openCard={openCard}
+            onExpanderChange={this.onChangeExpander}
              />
           )) }
            
