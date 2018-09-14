@@ -27,7 +27,7 @@ const middleware = applyMiddleware(thunk,logger);
 const store = createStore(reducers, middleware)
 
 
-injectTapEventPlugin();
+// injectTapEventPlugin();
 
 
 const styles = {
