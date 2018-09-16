@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 const passport = require('passport');
 const config = require('./../config');
+var cors = require('cors');
 
 require('./models').connect('mongodb://localhost:27017/events');
 
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(passport.initialize());
+app.use(cors());
 
 app.use(express.static('public'));
 

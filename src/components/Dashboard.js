@@ -8,6 +8,10 @@ import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import {getEvents, deleteEvent} from '../actions/userActions'
 import EventsView from '../views/EventsView'
+import Badge from 'material-ui/Badge'
+import IconButton from 'material-ui/IconButton'
+import NotificationsIcon from 'material-ui/svg-icons/social/notifications'
+import {updateField} from '../actions/userActions'
 
 const style = {
   gradiantStyle: {
@@ -62,14 +66,18 @@ class Dashboard extends React.Component {
     }))
   }
 
+  clickNotification () {
+    console.log('notification is clicked ===================================>')
+  }
+
   render () {
     const {secretData, userName, openCard} = this.state
-    const {availableEvents , deleteEvent } = this.props
+    const {availableEvents, deleteEvent, update} = this.props
     return (
       <Wrapper>
         <Card style={style.gradiantStyle} zDepth={0}>
           <FlexWrapper>
-            <div style={{width: '75%', marginLeft: '10%'}}>
+            <div style={{width: '70%', marginLeft: '10%'}}>
               <CardTitle
                 className='container'
                 title='Dashboard'
@@ -93,21 +101,40 @@ class Dashboard extends React.Component {
                   </strong>
                 </CardText>}
             </div>
-            <div style={{width: '15%'}}>
+            <div style={{width: '20%'}}>
               {Auth.isUserAuthenticated()
-                ? <div>
+                ? <div style={{marginTop: 20}}>
+                  <Badge
+                    badgeContent={10}
+                    secondary
+                    badgeStyle={{top: 3, right: 12}}
+                    style={{cursor: 'pointer', display: 'inline'}}
+                    onClick={() => {
+                      this.clickNotification()
+                    }}
+                    >
+                    <NotificationsIcon />
+                  </Badge>
                   <Link
                     to='/events'
-                    style={{fontSize: '14px', color: 'white'}}
+                    style={{
+                      fontSize: '14px',
+                      color: 'white',
+                      display: 'inline',
+                      paddingRight: 10
+                    }}
                     >
-                    <u>Create Events</u>
+                    <u>CreateEvents</u>
                   </Link>
-                    &nbsp; &nbsp; &nbsp;
                   <Link
                     to='/logout'
-                    style={{fontSize: '14px', color: 'white'}}
+                    style={{
+                      fontSize: '14px',
+                      color: 'white',
+                      display: 'inline'
+                    }}
                     >
-                    <u>Log out</u>
+                    <u>LogOut</u>
                   </Link>
                 </div>
                 : null}
@@ -121,7 +148,7 @@ class Dashboard extends React.Component {
                 {...events}
                 openCard={openCard}
                 onExpanderChange={this.onChangeExpander}
-                deleteEvent = {deleteEvent}
+                deleteEvent={deleteEvent}
               />
             ))}
         </ContentWrapper>
@@ -136,8 +163,11 @@ const mapDispatchToProps = dispatch => ({
   getEvents: () => {
     dispatch(getEvents())
   },
-  deleteEvent: (eventId) => {
-    dispatch(deleteEvent(eventId));
+  deleteEvent: eventId => {
+    dispatch(deleteEvent(eventId))
+  },
+  update: (field, value) => {
+    dispatch(updateField(field, value))
   }
 })
 

@@ -23,7 +23,10 @@ const EventsView = (
     _id,
     openCard,
     onExpanderChange,
-    deleteEvent   
+    deleteEvent,
+    duration,
+    participantNo,
+    update
   } // <div>
 ) => (
   <div id={_id}>
@@ -69,6 +72,8 @@ const EventsView = (
           user={user}
           _id={_id}
           deleteEvent={deleteEvent}
+          duration={duration}
+          participantNo={participantNo}
         />
       </CardText>
     </Card>

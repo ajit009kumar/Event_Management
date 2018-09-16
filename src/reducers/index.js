@@ -2,7 +2,9 @@
 import { combineReducers } from 'redux';
 // import { routerReducer } from 'react-router-redux';
 import { eventsReducers } from './eventsReducers';
+import { notificationReducers } from './notificationReducers';
 
 export default combineReducers({
-   events: eventsReducers
+   events: eventsReducers,
+   notifications:notificationReducers
 });

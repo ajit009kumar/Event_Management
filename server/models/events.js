@@ -12,7 +12,7 @@ const eventsSchema = new mongoose.Schema({
     location:{type:String},
     fees:{type:Number},
     tags:{type:String},
-    maximumNoOfParticipant:{type:Number},
+    participantNo:{type:Number},
 });
 
 module.exports = mongoose.model('Events', eventsSchema);

@@ -1,287 +1,425 @@
 'use strict'
-import axios from 'axios';
-import validator from 'validator';
-import Auth from '../modules/Auth';
-import { post , get, put } from '../utils/requests';
-import { apiEndPoint, apiURL } from '../utils/config';
+import axios from 'axios'
+import validator from 'validator'
+import Auth from '../modules/Auth'
+import {post, get, put} from '../utils/requests'
+import {apiEndPoint, apiURL} from '../utils/config'
 // import { get } from 'http';
 // import validator from "validator";
 
-
-
-
-export function updateField(fieldName,value){
+export function updateField (fieldName, value) {
   return function (dispatch) {
     dispatch({
       type: 'UPDATE_FIELD',
       fieldName,
-      value,
+      value
     })
   }
 }
 
-export const loginUser = (email,password) => (dispatch, getState)  => {
-    dispatch({
-      type:'LOGIN',
-      payload:  post(`${apiEndPoint}/auth/login`,{email,password})
-                .then((res) => {
-                  dispatch({
-                    type:'LOGIN_FULFILLED',
-                    data:res
-                  })
-                })
-                .catch((err) => {
-                  dispatch({
-                    type:'LOGIN_REJECTED',
-                    err
-                  })
-              })
-    })
-}
-
-export const signUp = (name,email,password) => (dispatch,getState)  => {
-
-  const { email , name , password } = getState().events;
-
-  let flag = 0;
-
-  if(validator.isEmpty(name)){
-    flag = 1;
-    dispatch({
-      type:'SIGNUP_NAME_FIELD_ERROR',
-      error:'Name is Required'
-    })
-  }
-
-  if(validator.isEmpty(email)){
-    flag = 1;
-    dispatch({
-      type:'SIGNUP_EMAIL_FIELD_ERROR',
-      error:'Email is Required'
-    })
-  }
-
-  if(validator.isEmpty(password)){
-    flag = 1;
-    dispatch({
-      type:'SIGNUP_PASSWORD_ERROR',
-      error:'Password is Required'
-    })
-  }
-
-  if(!flag){
-    dispatch({
-      type:'SIGNUP',
-      payload:post(`${apiEndPoint}/auth/signup`,{name,email,password}).then((res) => {
+export const loginUser = (email, password) => (dispatch, getState) => {
+  dispatch({
+    type: 'LOGIN',
+    payload: post(`${apiEndPoint}/auth/login`, {email, password})
+      .then(res => {
         dispatch({
-          type:'SIGNUP_FULFILLED',
-          data:res
-        })
-      }).catch((err) => {
-        dispatch({
-          type:'SIGNUP_REJECTED',
-          error:err.errors
+          type: 'LOGIN_FULFILLED',
+          data: res
         })
       })
+      .catch(err => {
+        dispatch({
+          type: 'LOGIN_REJECTED',
+          err
+        })
+      })
+  })
+}
+
+export const signUp = (name, email, password) => (dispatch, getState) => {
+  const {email, name, password} = getState().events
+
+  let flag = 0
+
+  if (validator.isEmpty(name)) {
+    flag = 1
+    dispatch({
+      type: 'SIGNUP_NAME_FIELD_ERROR',
+      error: 'Name is Required'
+    })
+  }
+
+  if (validator.isEmpty(email)) {
+    flag = 1
+    dispatch({
+      type: 'SIGNUP_EMAIL_FIELD_ERROR',
+      error: 'Email is Required'
+    })
+  }
+
+  if (validator.isEmpty(password)) {
+    flag = 1
+    dispatch({
+      type: 'SIGNUP_PASSWORD_ERROR',
+      error: 'Password is Required'
+    })
+  }
+
+  if (!flag) {
+    dispatch({
+      type: 'SIGNUP',
+      payload: post(`${apiEndPoint}/auth/signup`, {name, email, password})
+        .then(res => {
+          dispatch({
+            type: 'SIGNUP_FULFILLED',
+            data: res
+          })
+        })
+        .catch(err => {
+          dispatch({
+            type: 'SIGNUP_REJECTED',
+            error: err.errors
+          })
+        })
     })
   }
 }
 
-export const checkValidation = () => (dispatch,getState) => {
-   const { eventName , eventDescription , duration , location , fees , tags ,  participantNo} = getState().events;
+export const checkValidation = () => (dispatch, getState) => {
+  const {
+    eventName,
+    eventDescription,
+    duration,
+    location,
+    fees,
+    tags,
+    participantNo
+  } = getState().events
 
   let events = {
     eventName: eventName,
     eventDescription: eventDescription,
     duration: duration,
-    location:location,
-    fees:fees,
-    tags:tags,
-    participantNo:participantNo
-   }
+    location: location,
+    fees: fees,
+    tags: tags,
+    participantNo: participantNo
+  }
 
+  const token = Auth.getToken()
 
-  const token = Auth.getToken();
+  console.log(Auth.getToken())
 
-   console.log(Auth.getToken());
+  let flag = 0
+  if (validator.isEmpty(eventName)) {
+    flag = 1
+    dispatch({
+      type: 'EVENTNAME_INVALID',
+      error: 'Event Name Can Not Be Empty'
+    })
+  }
 
-   let flag = 0;
-   if( validator.isEmpty(eventName)){
-      flag = 1;
-      dispatch ({
-        type: 'EVENTNAME_INVALID',
-        error:'Event Name Can Not Be Empty'
-      });
-   }
-
-   if(validator.isEmpty(duration)) {
-    flag = 1;    
-    dispatch ({
+  if (validator.isEmpty(duration)) {
+    flag = 1
+    dispatch({
       type: 'EVENT_DURATION_INVALID',
-      error:'Event Duration Can Not Be Empty'
-    });    
+      error: 'Event Duration Can Not Be Empty'
+    })
   }
 
-   if(validator.isEmpty(location)){
-    flag = 1;    
-    dispatch ({
+  if (validator.isEmpty(location)) {
+    flag = 1
+    dispatch({
       type: 'EVENT_LOCATION_INVALID',
-      error:'Event Location Can not be empty'
-    });
+      error: 'Event Location Can not be empty'
+    })
   }
 
-  if(validator.isEmpty(fees)){
-    flag = 1;    
-    dispatch ({
+  if (validator.isEmpty(fees)) {
+    flag = 1
+    dispatch({
       type: 'EVENT_FEES_INVALID',
-      error:'Event Fees Can not be empty'
-    });
-  }
-
-  if(validator.isEmpty(tags)) {
-    flag = 1;
-    dispatch({
-      type:'EVENT_TAGS_INVALID',
-      error:'Event Tags Can not be Empty'
+      error: 'Event Fees Can not be empty'
     })
   }
 
-  if(validator.isEmpty(participantNo)) {
-    flag = 1;
+  if (validator.isEmpty(tags)) {
+    flag = 1
     dispatch({
-      type:'EVENT_PARTICIPATION_INVALID',
-      error:'Participation Number Can not be Empty'
+      type: 'EVENT_TAGS_INVALID',
+      error: 'Event Tags Can not be Empty'
     })
   }
 
-  if(validator.isEmpty(eventDescription)) {
-    flag = 1;
+  if (validator.isEmpty(participantNo)) {
+    flag = 1
     dispatch({
-      type:'EVENT_DESCRIPTION_INVALID',
-      error:'Event Description Can not be Empty'
+      type: 'EVENT_PARTICIPATION_INVALID',
+      error: 'Participation Number Can not be Empty'
     })
   }
 
-  if(isNaN(duration)){
-    flag = 1;
+  if (validator.isEmpty(eventDescription)) {
+    flag = 1
     dispatch({
-      type:'EVENT_DURATION_TYPE_INVALID',
-      error:'Duration Must Be A Number'
+      type: 'EVENT_DESCRIPTION_INVALID',
+      error: 'Event Description Can not be Empty'
     })
   }
 
-  if(isNaN(fees)) {
-    flag = 1;
+  if (isNaN(duration)) {
+    flag = 1
     dispatch({
-      type:'EVENT_FEES_TYPE_INVALID',
-      error:'Fees Must Be A Number'
+      type: 'EVENT_DURATION_TYPE_INVALID',
+      error: 'Duration Must Be A Number'
     })
   }
 
-  if(isNaN(participantNo)){
-    flag = 1;
+  if (isNaN(fees)) {
+    flag = 1
     dispatch({
-      type:'EVENT_PARTICIPATION_TYPE_INVALID',
-      error:'Participation Number Must Be A Number'
+      type: 'EVENT_FEES_TYPE_INVALID',
+      error: 'Fees Must Be A Number'
     })
   }
 
+  if (isNaN(participantNo)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_PARTICIPATION_TYPE_INVALID',
+      error: 'Participation Number Must Be A Number'
+    })
+  }
 
-
-
-  if(!flag){
-
-      dispatch({
-        type:'OPEN_DIALOG'
-      })
-
-
-   
+  if (!flag) {
+    dispatch({
+      type: 'OPEN_DIALOG'
+    })
   }
 }
 
-export const closeDialog = () => (dispatch,getState) => {
-    dispatch({
-      type:'CLOSE_DIALOG'
-    });
+export const closeDialog = () => (dispatch, getState) => {
+  dispatch({
+    type: 'CLOSE_DIALOG'
+  })
 }
 
-
-export const createEvent = () => (dispatch,getState) => {
-
-  const { eventName , eventDescription , duration , location , fees , tags ,  participantNo} = getState().events;
+export const createEvent = () => (dispatch, getState) => {
+  const {
+    eventName,
+    eventDescription,
+    duration,
+    location,
+    fees,
+    tags,
+    participantNo
+  } = getState().events
 
   let events = {
     eventName: eventName,
     eventDescription: eventDescription,
     duration: duration,
-    location:location,
-    fees:fees,
-    tags:tags,
-    participantNo:participantNo
-   }
+    location: location,
+    fees: fees,
+    tags: tags,
+    participantNo: participantNo
+  }
 
-  const token = Auth.getToken();
+  const token = Auth.getToken()
 
-   dispatch({
-      type:'CREATE_EVENT',
-      payload: post(`${apiEndPoint}/api/create_event`, events ,{
-        Authorization: `bearer ${token}`,
-      }).then((res) => {
-         dispatch({
-           type:'CREATE_EVENT_FULFILLED',
-           data:res
-         })
-      }).catch((err) => {
-         dispatch({
-           type:'CREATE_EVENT_REJECTED'
-         })
+  dispatch({
+    type: 'CREATE_EVENT',
+    payload: post(`${apiEndPoint}/api/create_event`, events, {
+      Authorization: `bearer ${token}`
+    })
+      .then(res => {
+        dispatch({
+          type: 'CREATE_EVENT_FULFILLED',
+          data: res
+        })
       })
-    })
+      .catch(err => {
+        dispatch({
+          type: 'CREATE_EVENT_REJECTED'
+        })
+      })
+  })
 }
 
-
-export const closeSuccessModal = () => (dispatch,getState) => {
-    dispatch({
-      type:'CLOSE_SUCCESS_MODAL'
-    })
+export const closeSuccessModal = () => (dispatch, getState) => {
+  dispatch({
+    type: 'CLOSE_SUCCESS_MODAL'
+  })
 }
 
-export const getEvents = () => (dispatch,getState) => {
-
-  const token = Auth.getToken();
+export const getEvents = () => (dispatch, getState) => {
+  const token = Auth.getToken()
 
   dispatch({
     type: 'FETCH_EVENTS',
-    payload:get(`${apiEndPoint}/api/fetchEvents`,{
-      Authorization: `bearer ${token}`,
-    }).then((res) => {
-        dispatch({
-          type:'FETCH_EVENTS_FULFILLED',
-          data:res.data
-        })
+    payload: get(`${apiEndPoint}/api/fetchEvents`, {
+      Authorization: `bearer ${token}`
+    }).then(res => {
+      dispatch({
+        type: 'FETCH_EVENTS_FULFILLED',
+        data: res.data
+      })
     })
   })
 }
 
-export const closeSignupModule = () => (dispatch,getState) => {
+export const closeSignupModule = () => (dispatch, getState) => {
   dispatch({
-    type:'CLOSE_SIGNUP_MODULE'
+    type: 'CLOSE_SIGNUP_MODULE'
   })
 }
 
-export const deleteEvent = (eventId) => (dispatch,getState) => {
-  console.log('eventID =          ==>',eventId);
-  const token = Auth.getToken();
+export const deleteEvent = eventId => (dispatch, getState) => {
+  console.log('eventID =          ==>', eventId)
+  const token = Auth.getToken()
   dispatch({
-    type:'DELETE_EVENT',
-    payload:put(`${apiEndPoint}/api/deleteEvent/`, {eventId},{
-      Authorization: `bearer ${token}`
-    }).then((res) => {
-        dispatch({
-          type: 'DELETE_EVENT_SUCCESSFULL',
-          data:res.data
-        })
-     })
-  }) 
+    type: 'DELETE_EVENT',
+    payload: put(
+      `${apiEndPoint}/api/deleteEvent/`,
+      {eventId},
+      {
+        Authorization: `bearer ${token}`
+      }
+    ).then(res => {
+      dispatch({
+        type: 'DELETE_EVENT_SUCCESSFULL',
+        data: res.data
+      })
+    })
+  })
+}
+
+export const setEventId = eventId => (dispatch, getState) => {
+  const {availableEvents} = getState().events
+  const filteredEvents = availableEvents.filter(x => x._id == eventId)[0]
+  dispatch({
+    type: 'SET_EVENT_ID',
+    filteredEvents,
+    eventId
+  })
+}
+
+export const checkEditedValue = eventDetails => (dispatch, getState) => {
+  
+  const {
+    duration,
+    eventDescription,
+    eventName,
+    fees,
+    location,
+    participantNo,
+    tags
+  } = eventDetails
+
+  let flag = 0
+  if (validator.isEmpty(eventName)) {
+    flag = 1
+    dispatch({
+      type: 'EVENTNAME_INVALID',
+      error: 'Event Name Can Not Be Empty'
+    })
+  }
+
+  if (validator.isEmpty(location)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_LOCATION_INVALID',
+      error: 'Event Location Can not be empty'
+    })
+  }
+
+  if ((fees === '' || isNaN(fees)) && validator.isEmpty(fees)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_FEES_INVALID',
+      error: 'Event Fees Can not be empty'
+    })
+  }
+
+  if (validator.isEmpty(tags)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_TAGS_INVALID',
+      error: 'Event Tags Can not be Empty'
+    })
+  }
+
+  if (validator.isEmpty(eventDescription)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_DESCRIPTION_INVALID',
+      error: 'Event Description Can not be Empty'
+    })
+  }
+
+  if ((duration == '' || isNaN(duration)) && validator.isEmpty(duration)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_DURATION_INVALID',
+      error: 'Event Duration Can Not Be Empty'
+    })
+  }
+
+  if (
+    (participantNo == '' || isNaN(participantNo)) &&
+    validator.isEmpty(participantNo)
+  ) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_PARTICIPATION_INVALID',
+      error: 'Participation Number Can not be Empty'
+    })
+  }
+
+  if (isNaN(duration)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_DURATION_TYPE_INVALID',
+      error: 'Duration Must Be A Number'
+    })
+  }
+
+  if (isNaN(fees)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_FEES_TYPE_INVALID',
+      error: 'Fees Must Be A Number'
+    })
+  }
+
+  if (isNaN(participantNo)) {
+    flag = 1
+    dispatch({
+      type: 'EVENT_PARTICIPATION_TYPE_INVALID',
+      error: 'Participation Number Must Be A Number'
+    })
+  }
+
+  dispatch({
+    type: 'UPDATE_EVENT',
+    payload: put(
+      `${apiEndPoint}/api/updateEvent/`,
+      {eventDetails},
+      {
+        Authorization: `bearer ${Auth.getToken()}`
+      }
+    ).then(res => {
+      // console.log('res =====================>',res);
+      dispatch({
+        type: 'UPDATE_EVENT_SUCCESSFULL',
+        data: res.data
+      })
+    })
+  })
+}
+
+export const openEventEditModal = () => (dispatch, getState) => {
+  dispatch({
+    type: 'OPEN_EDIT_MODEL'
+  })
 }

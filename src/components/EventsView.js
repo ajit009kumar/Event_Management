@@ -47,6 +47,7 @@ const SelectWrapper = styled.div`
             participantNoErrorMessage
         } = this.props;
 
+
         return(
             <div> 
             <Card
@@ -160,7 +161,7 @@ const SelectWrapper = styled.div`
   }
 
 //   export default EventsView;
-const mapStateToProps = state => state.events;
+const mapStateToProps = state =>  state.events;
 
 const mapDispatchToProps = dispatch => ({
   update: (field, value) => {
