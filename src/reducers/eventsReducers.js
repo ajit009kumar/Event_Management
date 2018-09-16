@@ -280,6 +280,13 @@ export function eventsReducers (state = {events: []}, action) {
       }
     }
 
+    case 'CLOSE_EDIT_MODEL':{
+      return{
+        ...state,
+        eventEditModal:false
+      }
+    }
+
     default:
       let {
         eventName,

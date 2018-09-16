@@ -33,7 +33,8 @@ import {
   checkValidation,
   checkEditedValue,
   openEventEditModal,
-  closeSuccessModal
+  closeSuccessModal,
+  closeEditModal
 } from '../actions/userActions'
 import validator from 'validator'
 
@@ -141,7 +142,7 @@ class EventsViewCard extends React.Component {
 
     const {eventId, openDialog, closeDialog} = this.state
     const {eventEditModal, openSuccessModal} = this.props.eventDetails
-    const {closeSuccessModal} = this.props
+    const {closeSuccessModal , closeEditModal } = this.props
 
     return (
       <div>
@@ -282,7 +283,7 @@ class EventsViewCard extends React.Component {
               backgroundColor={theme.buttonColor}
               style={{marginRight: 5}}
               labelColor={theme.primary1Color}
-              onClick={this.cancelModal}
+              onClick={closeEditModal}
             />,
             <RaisedButton label='Update' primary onClick={this.updateEvents} />
           ]}
@@ -293,6 +294,7 @@ class EventsViewCard extends React.Component {
             width: '70%',
             maxWidth: 'none'
           }}
+          onRequestClose={closeEditModal}
         >
           <ContentWrapper>
             <div>{this.getEditStepContent()}</div>
@@ -352,6 +354,9 @@ const mapDispatchToProps = dispatch => ({
   },
   closeSuccessModal: () => {
     dispatch(closeSuccessModal())
+  },
+  closeEditModal:() => {
+    dispatch(closeEditModal())
   }
 })
 

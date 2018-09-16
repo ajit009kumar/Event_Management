@@ -400,26 +400,35 @@ export const checkEditedValue = eventDetails => (dispatch, getState) => {
     })
   }
 
-  dispatch({
-    type: 'UPDATE_EVENT',
-    payload: put(
-      `${apiEndPoint}/api/updateEvent/`,
-      {eventDetails},
-      {
-        Authorization: `bearer ${Auth.getToken()}`
-      }
-    ).then(res => {
-      // console.log('res =====================>',res);
-      dispatch({
-        type: 'UPDATE_EVENT_SUCCESSFULL',
-        data: res.data
+  console.log('flag =============================>',flag);
+
+  if(!flag){
+    dispatch({
+      type: 'UPDATE_EVENT',
+      payload: put(
+        `${apiEndPoint}/api/updateEvent/`,
+        {eventDetails},
+        {
+          Authorization: `bearer ${Auth.getToken()}`
+        }
+      ).then(res => {
+        dispatch({
+          type: 'UPDATE_EVENT_SUCCESSFULL',
+          data: res.data
+        })
       })
     })
-  })
+  } 
 }
 
 export const openEventEditModal = () => (dispatch, getState) => {
   dispatch({
     type: 'OPEN_EDIT_MODEL'
+  })
+}
+
+export const closeEditModal = () => (dispatch,getState) => {
+  dispatch({
+      type: 'CLOSE_EDIT_MODEL'
   })
 }

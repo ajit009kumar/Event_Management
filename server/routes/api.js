@@ -39,6 +39,8 @@ router.put('/deleteEvent', async (req, res) => {
 })
 
 router.put('/updateEvent', async (req, res) => {
+
+
   const event = await Events.findOne({_id: req.body.eventDetails.eventId})
   event.eventName = req.body.eventDetails.eventName || event.eventName
   event.description = req.body.eventDetails.eventDescription || event.description
